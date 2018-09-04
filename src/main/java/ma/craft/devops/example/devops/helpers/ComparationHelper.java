@@ -8,8 +8,11 @@ public class ComparationHelper {
         return a == b;
     }
 
-
     public static boolean isHello(String anyString){
-        return "Hello".equals(anyString);
+        return anyString.equals("Hello");
+    }
+
+    public static String concatenateHelloWith(String value){
+        return value == null ?  "Hello" : "Hello"+value;
     }
 }
