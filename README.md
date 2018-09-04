@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/skokaina/devops.svg?branch=develop)](https://travis-ci.org/skokaina/devops)
+[![Build Status](https://travis-ci.org/skokaina/devops.svg?branch=feature_helpers)](https://travis-ci.org/skokaina/feature_helpers)
 
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=skokaina_devops&metric=alert_status)](https://sonarcloud.io/dashboard?id=skokaina_devops) 
 
