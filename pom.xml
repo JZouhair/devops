@@ -17,7 +17,21 @@
 			<name>Sallah Kokaina</name>
 		</developer>
 	</developers>
-
+	<scm>
+		<url>https://github.com/skokaina/devops</url>
+		<connection>scm:git:git://github.com/skokaina/devops.git</connection>
+		<developerConnection>scm:git:git@github.com:skokaina/devops.git</developerConnection>
+	</scm>
+	<issueManagement>
+		<url>https://github.com/skokaina/devops/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -29,6 +43,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<jacoco-maven-plugin.version>0.7.4.201502262128</jacoco-maven-plugin.version>
+		<jacoco.it.execution.data.file>
+			${project.build.directory}/coverage-reports/jacoco-it.exec
+		</jacoco.it.execution.data.file>
+		<jacoco.ut.execution.data.file>
+			${project.build.directory}/coverage-reports/jacoco-ut.exec
+		</jacoco.ut.execution.data.file>
 	</properties>
 
 	<dependencies>
@@ -52,6 +73,33 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>pre-unit-test</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<destFile>${jacoco.ut.execution.data.file}</destFile>
+						</configuration>
+					</execution>
+					<execution>
+						<id>pre-integration-test</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<destFile>${jacoco.it.execution.data.file}</destFile>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
