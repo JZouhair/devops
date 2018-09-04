@@ -50,10 +50,11 @@ script: ./build.sh
 ```
 if [ ${TRAVIS_PULL_REQUEST} = 'false' ] && [[ $TRAVIS_BRANCH = 'master'  ||  ${TRAVIS_BRANCH} = 'develop' ]]; then
       echo 'Checking Quality Gates'
-      mvn --batch-mode clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.4.0.905:sonar 
-      -Dsonar.host.url=${SONAR_URL} 
-      -Dsonar.login=${SONAR_LOGIN} 
-      -Dsonar.organization=${SONAR_ORGANIZATION};
+      mvn -B clean verify sonar:sonar \
+      -Dsonar.host.url=${SONAR_URL} \
+      -Dsonar.login=${SONAR_LOGIN} \
+      -Dsonar.projectKey=${SONAR_PROJECT} \
+      -Dsonar.organization=${SONAR_ORGANIZATION}
 fi
 ```
 8. Checkin the build.sh file with execution permission
