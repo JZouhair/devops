@@ -2,9 +2,6 @@
 
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=skokaina_devops&metric=alert_status)](https://sonarcloud.io/dashboard?id=skokaina_devops) 
 
-https://sonarcloud.io/api/project_badges/measure?project=skokaina_devops&metric=alert_status
-
-
 # devops
 Template project for CI/CD
 
@@ -46,7 +43,7 @@ jdk:
 - oraclejdk8
 script: ./build.sh
 ```
-7. Add a build.sh to the repository root
+7. Add a build.sh file to the repository root
 ```
 if [ ${TRAVIS_PULL_REQUEST} = 'false' ] && [[ $TRAVIS_BRANCH = 'master'  ||  ${TRAVIS_BRANCH} = 'develop' ]]; then
       echo 'Checking Quality Gates'
@@ -57,7 +54,7 @@ if [ ${TRAVIS_PULL_REQUEST} = 'false' ] && [[ $TRAVIS_BRANCH = 'master'  ||  ${T
       -Dsonar.organization=${SONAR_ORGANIZATION}
 fi
 ```
-8. Checkin the build.sh file with execution permission
+8. Check in the build.sh file with execution permission
 ```
 git update-index --add --chmod=+x build.sh
 git commit -m 'Make build.sh executable'
@@ -66,8 +63,22 @@ git push
 
 ### Github Pull Request Review using Sonar
 
-TO BE DONE
+1. Go to Github, open the project repository
+2. Generate a [personal access token](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/) for the GitHub user which will be used by SonarCloud to write the comments.
+3. Note your token, it will be stored in $SONAR_GITHUB_OAUTH travis variable
+4. Update build.sh file with a condition for pull requests
+```
+if [ ${TRAVIS_PULL_REQUEST} = 'false' ] && [[ $TRAVIS_BRANCH = 'master'  ||  ${TRAVIS_BRANCH} = 'develop' ]]; then
+    ...
+elif [ ${TRAVIS_PULL_REQUEST} != 'false' ]; then
+      echo 'Build and analyze pull request'
+      mvn -B clean verify sonar:sonar -Dsonar.analysis.mode=issues -Dsonar.host.url=${SONAR_URL} -Dsonar.login=${SONAR_LOGIN} -Dsonar.organization=${SONAR_ORGANIZATION} -Dsonar.github.oauth=${SONAR_GITHUB_OAUTH} -Dsonar.github.repository=skokaina/devops -Dsonar.github.pullRequest=${TRAVIS_PULL_REQUEST};
+fi
+```
+5. If you perform a pull request introducing code breaking sonar rules, the pull request will be annotated with review comments on Github.
 
 ### Deploy to Nexus
 
-TO BE DONE
+1. Got to [Sonatype](https://central.sonatype.org/pages/ossrh-guide.html) to create a ticket for an access to Nexus
+
+(TO BE DONE - OFFLINE as it takes time and justifications for Sonatype)
