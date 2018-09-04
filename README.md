@@ -24,9 +24,33 @@ jdk:
 
 You can get further information about travis build lifecycle customisation on [Travis Doc](https://docs.travis-ci.com/user/customizing-the-build/#Customizing-the-Build-Step)
 
-### Integrate SonarCloud Quality Gates
+### Integrate SonarCloud Quality Gates 
 
-TO BE DONE
+1. Go to Sonarcloud.io and login with Github
+2. Click on the + button on the top right and select "Create new project" 
+3. Click on "Install SonarCloud Github application", select the repository you want sonar to activated for, click on install
+4. Back on sonarcloud, select your project and click on create
+5. Provide a token name, click on generate, this is the value that will be used for $SONAR_LOGIN variable (note your project key and project organisation key on the right section)
+3. Edit your travis.yml and add a script step, to override the default build and test phase
+```
+cache:
+  directories:
+  - $HOME/.m2
+language: java
+jdk:
+- oraclejdk8
+script: ./build.sh
+```
+2. Add a build.sh to the repository root
+```
+if [ ${TRAVIS_PULL_REQUEST} = 'false' ] && [[ $TRAVIS_BRANCH = 'master'  ||  ${TRAVIS_BRANCH} = 'develop' ]]; then
+      echo 'Checking Quality Gates'
+      mvn --batch-mode clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.4.0.905:sonar 
+      -Dsonar.host.url=${SONAR_URL} 
+      -Dsonar.login=${SONAR_LOGIN} 
+      -Dsonar.organization=${SONAR_ORGANIZATION};
+fi
+```
 
 ### Github Pull Request Review using Sonar
 
