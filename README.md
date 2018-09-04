@@ -1,5 +1,10 @@
 [![Build Status](https://travis-ci.org/skokaina/devops.svg?branch=develop)](https://travis-ci.org/skokaina/devops)
 
+[![Quality Gate](https://sonarcloud.io/api/badges/gate?key=skokaina_devops)](https://sonarcloud.io/dashboard/index?id=skokaina_devops) 
+
+https://sonarcloud.io/api/project_badges/measure?project=skokaina_devops&metric=alert_status
+
+
 # devops
 Template project for CI/CD
 
@@ -31,7 +36,7 @@ You can get further information about travis build lifecycle customisation on [T
 3. Click on "Install SonarCloud Github application", select the repository you want sonar to activated for, click on install
 4. Back on sonarcloud, select your project and click on create
 5. Provide a token name, click on generate, this is the value that will be used for $SONAR_LOGIN variable (note your project key and project organisation key on the right section)
-3. Edit your travis.yml and add a script step, to override the default build and test phase
+6. Edit your travis.yml and add a script step, to override the default build and test phase
 ```
 cache:
   directories:
@@ -41,7 +46,7 @@ jdk:
 - oraclejdk8
 script: ./build.sh
 ```
-2. Add a build.sh to the repository root
+7. Add a build.sh to the repository root
 ```
 if [ ${TRAVIS_PULL_REQUEST} = 'false' ] && [[ $TRAVIS_BRANCH = 'master'  ||  ${TRAVIS_BRANCH} = 'develop' ]]; then
       echo 'Checking Quality Gates'
@@ -50,6 +55,12 @@ if [ ${TRAVIS_PULL_REQUEST} = 'false' ] && [[ $TRAVIS_BRANCH = 'master'  ||  ${T
       -Dsonar.login=${SONAR_LOGIN} 
       -Dsonar.organization=${SONAR_ORGANIZATION};
 fi
+```
+8. Checkin the build.sh file with execution permission
+```
+git update-index --add --chmod=+x build.sh
+git commit -m 'Make build.sh executable'
+git push
 ```
 
 ### Github Pull Request Review using Sonar
