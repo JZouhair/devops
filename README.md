@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/skokaina/devops.svg?branch=feature_helpers)](https://travis-ci.org/skokaina/feature_helpers)
+[![Build Status](https://travis-ci.org/skokaina/devops.svg?branch=develop)](https://travis-ci.org/skokaina/develop)
 
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=skokaina_devops&metric=alert_status)](https://sonarcloud.io/dashboard?id=skokaina_devops) 
 
@@ -72,7 +72,16 @@ if [ ${TRAVIS_PULL_REQUEST} = 'false' ] && [[ $TRAVIS_BRANCH = 'master'  ||  ${T
     ...
 elif [ ${TRAVIS_PULL_REQUEST} != 'false' ]; then
       echo 'Build and analyze pull request'
-      mvn -B clean verify sonar:sonar -Dsonar.analysis.mode=issues -Dsonar.host.url=${SONAR_URL} -Dsonar.login=${SONAR_LOGIN} -Dsonar.organization=${SONAR_ORGANIZATION} -Dsonar.github.oauth=${SONAR_GITHUB_OAUTH} -Dsonar.github.repository=skokaina/devops -Dsonar.github.pullRequest=${TRAVIS_PULL_REQUEST};
+      mvn -B clean verify sonar:sonar \
+      -Dsonar.host.url=${SONAR_URL}
+      -Dsonar.projectKey=${SONAR_PROJECT}
+      -Dsonar.organization=${SONAR_ORGANIZATION}
+      -Dsonar.login=${SONAR_LOGIN}
+      -Dsonar.github.oauth=${SONAR_GITHUB_OAUTH}
+      -Dsonar.pullrequest.github.repository=${TRAVIS_REPO_SLUG} 
+      -Dsonar.pullrequest.provider=GitHub 
+      -Dsonar.pullrequest.branch=${TRAVIS_BRANCH} 
+      -Dsonar.pullrequest.key=${TRAVIS_PULL_REQUEST};
 fi
 ```
 5. If you perform a pull request introducing code breaking sonar rules, the pull request will be annotated with review comments on Github.
